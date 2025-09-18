@@ -47,10 +47,13 @@ def install_dependencies():
                       check=True, capture_output=True)
         print("✅ Dependencies installed")
         
-        # Install Playwright browsers
-        subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], 
-                      check=True, capture_output=True)
-        print("✅ Playwright browsers installed")
+        # Install Playwright browsers only if not skipped
+        if os.environ.get("PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD") != "1":
+            subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], 
+                          check=True, capture_output=True)
+            print("✅ Playwright browsers installed")
+        else:
+            print("⏭️ Skipping Playwright browser installation (PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1)")
         
     except subprocess.CalledProcessError as e:
         print(f"❌ Failed to install dependencies: {e}")
